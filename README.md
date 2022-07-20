@@ -1,5 +1,5 @@
 # Multilingual-GLM
-The multilingual variant of GLM, a general language model trained with autoregressive blank infilling objective 
+The multilingual variant of GLM, a general language model trained with autoregressive blank infilling objective. The backbone structure of this model is based on [GLM: General Language Model Pretraining with Autoregressive Blank Infilling](https://aclanthology.org/2022.acl-long.26/) (Du et al., ACL 2022) 
 
 
 ## Citation 
