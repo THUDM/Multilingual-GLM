@@ -4,11 +4,38 @@ This repository contains the code of MGLM, the multilingual variant of GLM, a ge
 The backbone structure of this model is based on [GLM: General Language Model Pretraining with Autoregressive Blank Infilling](https://aclanthology.org/2022.acl-long.26/) (Du et al., ACL 2022) 
 
 
+Code is mainly based on [GLM](https://github.com/THUDM/GLM). Part of the code is also based on [Megatron-LM](https://github.com/NVIDIA/Megatron-LM) and [PET](https://github.com/timoschick/pet).
+
 ## Pretrained Models
+
+
 
 ## Test Results
 
+### Tasks in XTREME Benchmark
+#### [XNLI](https://aclanthology.org/D18-1269/)
+
+#### [PAWS-X](https://aclanthology.org/D19-1382/)
+
+#### [XQuAD](https://github.com/deepmind/xquad)
+
+#### [MLQA](https://aclanthology.org/2020.acl-main.653/)
+
+#### [TyDiQA](https://aclanthology.org/2020.tacl-1.30/)
+
+### Neural Cross Lingual Summarization
+
+#### [NCLS](https://aclanthology.org/D19-1302/)
+
 ## Get Started
+
+### Manual Installation
+Please first install PyTorch 
+`pip3 install torch==1.9.0+cu111 torchvision==0.10.0+cu111 torchaudio==0.9.0 -f https://download.pytorch.org/whl/torch_stable.html  --no-cache-dir`
+and [apex](https://github.com/NVIDIA/apex).
+
+Then install other dependencies
+`pip3 install -r requirements.txt`
 
 ## Usage
 
