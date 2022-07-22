@@ -44,7 +44,7 @@ Then install other dependencies
 ## MT5 Reproduction 
 The code for reproducing experiments in MT5 `finetune_mt5.py`. We use a tool called [wandb](https://wandb.ai/site) to track our experiments. After signing up for a new account, use `wandb login --relogin` to login. You can also use `wandb offline` to turn off wandb synchronizing your experiment online.
 
-If you only want to use one GPU to train, simply type `python3 finetune_mt5.py scisummnet simple` to train on the [scisummnet dataset](https://cs.stanford.edu/~myasu/projects/scisumm_net/). Our distributed training is automated with [Accelerate](https://huggingface.co/docs/accelerate/index). `accelerate config` sets up the configuration. `accelerate test` runs a sanity check. `accelerate launch finetune_mt5.py scisummnet simple` runs the training on the scisummnet dataset
+If you only want to use one GPU to train, simply type `python3 finetune_mt5.py scisummnet simple` to train on the [scisummnet dataset](https://cs.stanford.edu/~myasu/projects/scisumm_net/). Our distributed training is automated with [Accelerate](https://huggingface.co/docs/accelerate/index). `accelerate config` sets up the configuration. `accelerate test` runs a sanity check. `accelerate launch finetune_mt5.py scisummnet simple` runs the training on the scisummnet dataset.
 
 ## Citation 
 Citation for the GLM paper： 
