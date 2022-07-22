@@ -39,7 +39,19 @@ Metric is Rouge-1/Rouge-2/Rouge-Lsum
 | GLM-Large  | 50.27/30.94/38.44 | 
 | MT5-Large(Reproduced) | 42.31/22.40/31.33 |
 
-## Manual Installation
+## Get Started
+### Docker Image
+We prepare two docker images based on CUDA 10.2 and CUDA 11.2. You can pull the pre-built images from Docker Hub and run with docker v19.03+
+  ```shell
+    docker run --gpus all --rm -it --ipc=host zxdu20/glm-cuda102
+  ```
+  or replace `glm-cuda102` with `glm-cuda112`.
+
+  You can also modify the image according to your requirements in [docker/cuda102.dockerfile](docker/cuda102.dockerfile) and build the image yourself
+  ```shell
+    docker build -f cuda102.dockerfile . -t glm-cuda102
+  ```
+### Manual Installation
 Please first install PyTorch 
 `pip3 install torch==1.9.0+cu111 torchvision==0.10.0+cu111 torchaudio==0.9.0 -f https://download.pytorch.org/whl/torch_stable.html  --no-cache-dir`
 and [apex](https://github.com/NVIDIA/apex).
@@ -59,44 +71,44 @@ Then install other dependencies
 
 - For Classification tasks, we use the script `scripts/ds_finetune_superglue.sh`.Run the following script to train on the XNLI dataset.
 ```shell
-bash scripts/ds_finetune_superglue.sh \
+  bash scripts/ds_finetune_superglue.sh \
      config_tasks/model_blocklm_multilingual_large.sh \
      config_tasks/task_xnli.sh
 ```
 
 - For QA tasks, we use the script `scripts/ds_finetune_seq2seq.sh`. Run the following script to train on the MLQA dataset.
 ```shell
-bash scripts/ds_finetune_seq2seq.sh  \
-config_tasks/model_blocklm_multilingual_large.sh  \
-config_tasks/seq_mlqa.sh
+  bash scripts/ds_finetune_seq2seq.sh  \
+    config_tasks/model_blocklm_multilingual_large.sh  \
+    config_tasks/seq_mlqa.sh
 ```
 ### Cross-lingual Summary
 - Download the [NCLS dataset](https://github.com/ZNLP/NCLS-Corpora)
 - For Summarization tasks, we use the script `scripts/ds_finetune_summary.sh`. Run the following to train on NCLS English to Chinese. 
 ```shell
-bash scripts/ds_finetune_summary.sh  \
-config_tasks/model_blocklm_multilingual_large.sh  \
-config_tasks/seq_ncls.sh
+  bash scripts/ds_finetune_summary.sh  \
+    config_tasks/model_blocklm_multilingual_large.sh  \
+    config_tasks/seq_ncls.sh
 ```
 
 ### Blank Filling(Interactive)
 - Change `CHECKPOINT_PATH` in  `scripts/generate_block.sh` to your local path and run the following script.
 ```shell
-bash scripts/generate_block.sh  \
-config_tasks/model_blocklm_multilingual_large.sh
+  bash scripts/generate_block.sh  \
+    config_tasks/model_blocklm_multilingual_large.sh
 ```
 
 ### Model Parallelism
 If your encounter the `CUDA out of memory` error, which means you GPU memory is limited, you can try the model parallelism to divide the parameters into multiple GPUs. Take the two-way model parallelism as an example. First run `change_mp.py` to divide the checkpoint:
 ```shell
-python change_mp.py path_to_the_checkpoint 2
+  python3 change_mp.py path_to_the_checkpoint 2
 ```
 Then update the checkpoint path in the model config file (such as [config_tasks/model_blocklm_multilingual_large.sh](config_tasks/model_blocklm_multilingual_large.sh)) and change `MP_SIZE` in the script (such as [scripts/ds_finetune_superglue.sh](scripts/ds_finetune_superglue.sh)) to `2`.
 
 ## Pretrain
 Run the following script to pre-train the MGLM-Large model
 ```shell
-bash scripts/ds_pretrain_nvidia.sh config/ds_multi_blockta_large.sh
+  bash scripts/ds_pretrain_nvidia.sh config/ds_multi_blockta_large.sh
 ```
 
 The script [scripts/ds_pretrain_nvidia.sh](scripts/ds_pretrain_nvidia.sh) launches the training program with DeepSpeed. You should change `NUM_WORKERS` and `NUM_GPUS_PER_WORKER` to the number of workers and the number of gpus per worker. Also change `HOST_FILE_PATH` to the path to an OpenMPI-style hostfile. More details about DeepSpeed launcher can be found [here](https://www.deepspeed.ai/getting-started/#resource-configuration-multi-node).
@@ -108,13 +120,13 @@ The code for reproducing experiments in MT5 `finetune_mt5.py`. We use a tool cal
 
 If you only want to use one GPU to train, use
 ```shell
-python3 finetune_mt5.py scisummnet simple
+  python3 finetune_mt5.py scisummnet simple
 ``` 
 to train on the [scisummnet dataset](https://cs.stanford.edu/~myasu/projects/scisumm_net/). 
 
 Our distributed training is automated with [Accelerate](https://huggingface.co/docs/accelerate/index). `accelerate config` sets up the configuration. `accelerate test` runs a sanity check.
 ```shell
-accelerate launch finetune_mt5.py scisummnet simple
+  accelerate launch finetune_mt5.py scisummnet simple
 ``` 
 runs the training on the scisummnet dataset.
 
