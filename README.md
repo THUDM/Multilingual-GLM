@@ -14,9 +14,9 @@ Here is the download links to our
 
 [Finetuned All-to-Chinese Summarizer Checkpoint](https://static.aminer.cn/misc/MultiGLM/1B/summarizer_zh.pt) (2.0 GB)
 
-[DeepSpeed Configuration File](https://static.aminer.cn/misc/MultiGLM/1B/model_blocklm_multilingual_large.sh)
+[Model Configuration File](https://static.aminer.cn/misc/MultiGLM/1B/model_blocklm_multilingual_large.sh)
 
-[Tokenizer](https://static.aminer.cn/misc/MultiGLM/1B/mglm250k/mglm250k-uni.model) 
+[Multilingual Tokenizer](https://static.aminer.cn/misc/MultiGLM/1B/mglm250k/mglm250k-uni.model) 
 
 ## Test Results
 
