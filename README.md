@@ -41,6 +41,8 @@ Then install other dependencies
 
 ## Pretrain
 
+## MT5 Reproduction 
+The code for reproducing experiments in MT5 `finetune_mt5.py`. 
 ## Citation 
 Citation for the GLM paper： 
 ```
