@@ -1,5 +1,7 @@
 # Multilingual-GLM
-This repository contains the code of MGLM, the multilingual variant of GLM, a general language model trained with an autoregressive blank infilling objective. If you want to know more, you may refer to our [slides](https://github.com/truthbutcher/studymaterials/blob/main/MultiGLM.pdf) on MGLM.
+This repository contains the code of MGLM, the multilingual variant of GLM, a general language model trained with an autoregressive blank infilling objective. 
+
+You may refer to our [slides](https://github.com/truthbutcher/studymaterials/blob/main/MultiGLM.pdf) on MGLM. You may also want to check out our [interactive demo](https://www.sci-brain.cn/innovations/multilingual_big_model) based on MGLM that generates a brief Chinese/English summary for your article.
 
 The backbone structure of this model is based on [GLM: General Language Model Pretraining with Autoregressive Blank Infilling](https://aclanthology.org/2022.acl-long.26/) (Du et al., ACL 2022) 
 
@@ -20,27 +22,31 @@ Here are the download links to our
 ## Test Results
 
 ### Tasks in XTREME Benchmark
-#### [XNLI](https://aclanthology.org/D18-1269/)
+|  Model | XNLI | PAWS-X | XQuAD | MLQA | TyDiQA |
+|  ----  | ---- | ---- | ---- | ---- | ---- |
+| GLM-Large  | 75.6 | 85.2 | 83.6/71.9 | 67.52/54.34 |69.6/55.6 |
+| [MT5-Large](https://github.com/google-research/multilingual-t5) | 81.1 | 88.9 | 77.8/61.5 | 71.2/51.7 | 69.9/52.2 |
 
-#### [PAWS-X](https://aclanthology.org/D19-1382/)
-
-#### [XQuAD](https://github.com/deepmind/xquad)
-
-#### [MLQA](https://aclanthology.org/2020.acl-main.653/)
-
-#### [TyDiQA](https://aclanthology.org/2020.tacl-1.30/)
 
 ### Neural Cross Lingual Summarization
 
 #### [NCLS](https://aclanthology.org/D19-1302/)
 
-### Manual Installation
+Metric is Rouge-1/Rouge-2/Rouge-Lsum
+
+|  Model | NCLS English to Chinese|
+|  ----  | ---- | 
+| GLM-Large  | 50.27/30.94/38.44 | 
+| MT5-Large(Reproduced) | 42.31/22.40/31.33 |
+
+## Manual Installation
 Please first install PyTorch 
 `pip3 install torch==1.9.0+cu111 torchvision==0.10.0+cu111 torchaudio==0.9.0 -f https://download.pytorch.org/whl/torch_stable.html  --no-cache-dir`
 and [apex](https://github.com/NVIDIA/apex).
 
 Then install other dependencies
 `pip3 install -r requirements.txt`
+
 
 ## Usage
 
