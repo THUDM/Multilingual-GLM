@@ -1,8 +1,7 @@
 # Multilingual-GLM
-This repository contains the code of MGLM, the multilingual variant of GLM, a general language model trained with autoregressive blank infilling objective.
+This repository contains the code of MGLM, the multilingual variant of GLM, a general language model trained with an autoregressive blank infilling objective. If you want to know more, you may refer to our [slides](https://github.com/truthbutcher/studymaterials/blob/main/MultiGLM.pdf) on MGLM.
 
 The backbone structure of this model is based on [GLM: General Language Model Pretraining with Autoregressive Blank Infilling](https://aclanthology.org/2022.acl-long.26/) (Du et al., ACL 2022) 
-
 
 Code is mainly based on [GLM](https://github.com/THUDM/GLM). Part of the code is also based on [Megatron-LM](https://github.com/NVIDIA/Megatron-LM) and [PET](https://github.com/timoschick/pet).
 
@@ -47,6 +46,13 @@ Then install other dependencies
 
 ## Usage
 
+
+### Blank Filling(Interactive)
+- Change `CHECKPOINT_PATH` in  `scripts/generate_block.sh` to your local path and run the following script.
+```
+bash scripts/generate_block.sh  \
+config_tasks/model_blocklm_multilingual_large.sh
+```
 ## Pretrain
 
 ## MT5 Reproduction 
