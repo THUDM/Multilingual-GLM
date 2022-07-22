@@ -8,9 +8,11 @@ Code is mainly based on [GLM](https://github.com/THUDM/GLM). Part of the code is
 
 ## Pretrained Models
 
+Here is the download links to our
+
 [Pretrained Checkpoint](https://static.aminer.cn/misc/MultiGLM/1B/pretrained.pt) (13.9 GB)
 
-[Finetuned Summarizer Checkpoint](https://static.aminer.cn/misc/MultiGLM/1B/summarizer_zh.pt) (2.0 GB)
+[Finetuned All-to-Chinese Summarizer Checkpoint](https://static.aminer.cn/misc/MultiGLM/1B/summarizer_zh.pt) (2.0 GB)
 
 [DeepSpeed Configuration File](https://static.aminer.cn/misc/MultiGLM/1B/model_blocklm_multilingual_large.sh)
 
