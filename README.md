@@ -3,7 +3,7 @@ This repository contains the code of MGLM, the multilingual variant of GLM, a ge
 
 The backbone structure of this model is based on [GLM: General Language Model Pretraining with Autoregressive Blank Infilling](https://aclanthology.org/2022.acl-long.26/) (Du et al., ACL 2022) 
 
-Code is mainly based on [GLM](https://github.com/THUDM/GLM). Part of the code is also based on [Megatron-LM](https://github.com/NVIDIA/Megatron-LM) and [PET](https://github.com/timoschick/pet).
+Code is mainly based on [THUDM/GLM](https://github.com/THUDM/GLM). Part of the code is also based on [Megatron-LM](https://github.com/NVIDIA/Megatron-LM) and [PET](https://github.com/timoschick/pet).
 
 ## Pretrained Models
 
@@ -34,8 +34,6 @@ Here are the download links to our
 
 #### [NCLS](https://aclanthology.org/D19-1302/)
 
-## Get Started
-
 ### Manual Installation
 Please first install PyTorch 
 `pip3 install torch==1.9.0+cu111 torchvision==0.10.0+cu111 torchaudio==0.9.0 -f https://download.pytorch.org/whl/torch_stable.html  --no-cache-dir`
@@ -46,14 +44,58 @@ Then install other dependencies
 
 ## Usage
 
+### XTREME
+
+- Download the [XTREME](https://sites.research.google/xtreme/) data and check the experiment setup in 
+  [scripts/ds_finetune_superglue.sh](scripts/ds_finetune_superglue.sh). Note that `DATA_ROOT, CHECKPOINT_PATH, SAVE_PATH` 
+  need to be changed to your local path. You may also change the `batch-size` and `nproc_per_node` according to your 
+  available hardware.
+
+- For Classification tasks, we use the script `scripts/ds_finetune_superglue.sh`.Run the following script to train on the XNLI dataset.
+```shell
+bash scripts/ds_finetune_superglue.sh \
+     config_tasks/model_blocklm_multilingual_large.sh \
+     config_tasks/task_xnli.sh
+```
+
+- For QA tasks, we use the script `scripts/ds_finetune_seq2seq.sh`. Run the following script to train on the MLQA dataset.
+```shell
+bash scripts/ds_finetune_seq2seq.sh  \
+config_tasks/model_blocklm_multilingual_large.sh  \
+config_tasks/seq_mlqa.sh
+```
+### Cross-lingual Summary
+- Download the [NCLS dataset](https://github.com/ZNLP/NCLS-Corpora)
+- For Summarization tasks, we use the script `scripts/ds_finetune_summary.sh`. Run the following to train on NCLS English to Chinese. 
+```shell
+bash scripts/ds_finetune_summary.sh  \
+config_tasks/model_blocklm_multilingual_large.sh  \
+config_tasks/seq_ncls.sh
+```
 
 ### Blank Filling(Interactive)
 - Change `CHECKPOINT_PATH` in  `scripts/generate_block.sh` to your local path and run the following script.
-```
+```shell
 bash scripts/generate_block.sh  \
 config_tasks/model_blocklm_multilingual_large.sh
 ```
+
+### Model Parallelism
+If your encounter the `CUDA out of memory` error, which means you GPU memory is limited, you can try the model parallelism to divide the parameters into multiple GPUs. Take the two-way model parallelism as an example. First run `change_mp.py` to divide the checkpoint:
+```shell
+python change_mp.py path_to_the_checkpoint 2
+```
+Then update the checkpoint path in the model config file (such as [config_tasks/model_blocklm_multilingual_large.sh](config_tasks/model_blocklm_multilingual_large.sh)) and change `MP_SIZE` in the script (such as [scripts/ds_finetune_superglue.sh](scripts/ds_finetune_superglue.sh)) to `2`.
+
 ## Pretrain
+Run the following script to pre-train the MGLM-Large model
+```shell
+bash scripts/ds_pretrain_nvidia.sh config/ds_multi_blockta_large.sh
+```
+
+The script [scripts/ds_pretrain_nvidia.sh](scripts/ds_pretrain_nvidia.sh) launches the training program with DeepSpeed. You should change `NUM_WORKERS` and `NUM_GPUS_PER_WORKER` to the number of workers and the number of gpus per worker. Also change `HOST_FILE_PATH` to the path to an OpenMPI-style hostfile. More details about DeepSpeed launcher can be found [here](https://www.deepspeed.ai/getting-started/#resource-configuration-multi-node).
+
+The file [config/ds_multi_blockta_large.sh](config/ds_multi_blockta_large.sh) defines the hyperparameters for pretraining. Most of the arguments are fairly self-explanatory. Specifically, `--train-data` can be multiple keywords defined in `NAMED_CORPORA` in [data_utils/corpora.py](data_utils/corpora.py). The hyperparameters of the optimizer are defined in the corresponding json file under `config`. The semantics of the json file can be found [here](https://www.deepspeed.ai/docs/config-json).
 
 ## MT5 Reproduction 
 The code for reproducing experiments in MT5 `finetune_mt5.py`. We use a tool called [wandb](https://wandb.ai/site) to track our experiments. After signing up for a new account, use `wandb login --relogin` to login. You can also use `wandb offline` to turn off wandb synchronizing your experiment online.
