@@ -10,11 +10,11 @@ Code is mainly based on [GLM](https://github.com/THUDM/GLM). Part of the code is
 
 [Pretrained Checkpoint](https://static.aminer.cn/misc/MultiGLM/1B/pretrained.pt) (13.9 GB)
 
-[Finetuned Summarizer Checkpoint](https://static.aminer.cn/misc/MultiGLM/1B/summarizer_zh.pt)
+[Finetuned Summarizer Checkpoint](https://static.aminer.cn/misc/MultiGLM/1B/summarizer_zh.pt) (2.0 GB)
 
 [DeepSpeed Configuration File](https://static.aminer.cn/misc/MultiGLM/1B/model_blocklm_multilingual_large.sh)
 
-[Tokenizer](https://static.aminer.cn/misc/MultiGLM/1B/mglm250k/mglm250k-uni.model)
+[Tokenizer](https://static.aminer.cn/misc/MultiGLM/1B/mglm250k/mglm250k-uni.model) 
 
 ## Test Results
 
