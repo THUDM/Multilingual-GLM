@@ -8,7 +8,7 @@ Code is mainly based on [GLM](https://github.com/THUDM/GLM). Part of the code is
 
 ## Pretrained Models
 
-Here is the download links to our
+Here are the download links to our
 
 [Pretrained Checkpoint](https://static.aminer.cn/misc/MultiGLM/1B/pretrained.pt) (13.9 GB)
 
