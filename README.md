@@ -40,6 +40,7 @@ Metric is Rouge-1/Rouge-2/Rouge-Lsum
 | MT5-Large(Reproduced) | 42.31/22.40/31.33 |
 
 ## Get Started
+<!--
 ### Docker Image
 We prepare two docker images based on CUDA 10.2 and CUDA 11.2. You can pull the pre-built images from Docker Hub and run with docker v19.03+
   ```shell
@@ -51,6 +52,7 @@ We prepare two docker images based on CUDA 10.2 and CUDA 11.2. You can pull the 
   ```shell
     docker build -f cuda102.dockerfile . -t glm-cuda102
   ```
+-->
 ### Manual Installation
 Please first install PyTorch 
 `pip3 install torch==1.9.0+cu111 torchvision==0.10.0+cu111 torchaudio==0.9.0 -f https://download.pytorch.org/whl/torch_stable.html  --no-cache-dir`
