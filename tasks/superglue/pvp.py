@@ -1380,8 +1380,8 @@ class CMRCPVP(PVP):
 
 class XnliPVP(PVP):
     VERBALIZER = {
-        "contradiction": [" No"],
-        "entailment": [" Yes"],
+        "contradiction": [" False"],
+        "entailment": [" True"],
         "neutral": [" Maybe"]
     }
 
@@ -1396,34 +1396,36 @@ class XnliPVP(PVP):
         # switch text_a and text_b to get the correct order
         text_a = example.text_a
         text_b = example.text_b.rstrip(string.punctuation)
+        text_a_new = text_a.strip()
+        text_b_new = text_b.strip()
         if self.pattern_id == 0:
-            parts_a, parts_b = [None, '"', self.shortenable(text_b), '" ?'], [None, [self.mask], ',', None, ' "',
-                                                                              self.shortenable(text_a), '"']
+            #parts_a, parts_b = [None, '"', self.shortenable(text_b), '" ?'], [None, [self.mask], ',', None, ' "', self.shortenable(text_a), '"']
+            raise NotImplementedError(self.pattern_id)
         elif self.pattern_id == 1:
-            parts_a, parts_b = [None, self.shortenable(text_b), '?'], [None, [self.mask], ',', None,
-                                                                       self.shortenable(" " + text_a)]
+            #parts_a, parts_b = [None, self.shortenable(text_b), '?'], [None, [self.mask], ',', None, self.shortenable(" " + text_a)]
+            raise NotImplementedError(self.pattern_id)
         elif self.pattern_id == 2:
-            parts_a, parts_b = [None, '"', self.shortenable(text_b), '" ?'], [None, [self.mask], '. "', None,
-                                                                              self.shortenable(text_a), '"']
+            #parts_a, parts_b = [None, '"', self.shortenable(text_b), '" ?'], [None, [self.mask], '. "', None, self.shortenable(text_a), '"']
+            raise NotImplementedError(self.pattern_id)
         elif self.pattern_id == 3:
-            parts_a, parts_b = [None, self.shortenable(text_b), '?'], [None, [self.mask], '.', None,
-                                                                       self.shortenable(" " + text_a)]
+            #parts_a, parts_b = [None, self.shortenable(text_b), '?'], [None, [self.mask], '.', None, self.shortenable(" " + text_a)]
+            raise NotImplementedError(self.pattern_id)
         elif self.pattern_id == 4:
-            parts_a, parts_b = [None, self.shortenable(text_a), None, ' question:', self.shortenable(" " + text_b),
-                                ' True or False?', None, ' answer:', [self.mask]], []
+            #parts_a, parts_b = [None, self.shortenable(text_a), None, ' question:', self.shortenable(" " + text_b), ' True or False?', None, ' answer:', [self.mask]], []
+            parts_a, parts_b = ['Based on the fact written in foreign language: "', self.shortenable(text_a_new), '".',  None, ' Is the followling statement reasonably True or definitely False: "', self.shortenable(text_b_new), '"?', None, ' Answer:',[self.mask]], []
         else:
             raise NotImplementedError(self.pattern_id)
         parts_a, parts_b = self.replace_prompt_tokens(parts_a, parts_b)
         return parts_a, parts_b
 
     def verbalize(self, label) -> List[str]:
-        if self.pattern_id == 4:
-            if label == 'entailment':
-                return [' Yes']
-            elif label == 'contradiction':
-                return [' No']
-            else:
-                return [' Maybe']
+        #if self.pattern_id == 4:
+        #    if label == 'entailment':
+        #        return [' Yes']
+        #    elif label == 'contradiction':
+        #        return [' No']
+        #    else:
+        #        return [' Maybe']
         return XnliPVP.VERBALIZER[label]
 
 class PawsxPVP(PVP):

@@ -152,11 +152,11 @@ def finetune_forward_step(batch, model, args, timers):
     #shape of labels is (B)
     #print(f"logits.shape = {logits.shape}")
     #print(f"labels.shape = {labels.shape}")
-    acc = torch.sum(torch.argmax(logits, dim=1) == labels)
-    acc = acc.item() / logits.shape[0]
-    
-    #print(f"acc is {acc}")
-    
+    correct = torch.sum(torch.argmax(logits, dim=1) == labels)
+    acc = correct.item() / logits.shape[0]
+    #print(f"acc is {correct.item()}/{logits.shape[0]} = {acc}")
+    correct = None
+
     if args.adapet:
         batch_size, num_classes = logits.size()[:2]
         label_mask = torch.ones(batch_size, num_classes, device=logits.device)
@@ -197,7 +197,7 @@ def finetune_forward_step(batch, model, args, timers):
     # Reduce loss for logging.
         
     return loss, {'bert': torch.cuda.FloatTensor([0]), 'sentence': torch.cuda.FloatTensor([0]),
-                  'gpt': torch.cuda.FloatTensor([0]), 'multi-task': torch.cuda.FloatTensor([1]), 'acc': acc}
+                  'gpt': torch.cuda.FloatTensor([0]), 'multi-task': torch.cuda.FloatTensor([1])} #, 'acc': acc}
 
 
 def _build_infinite_size_dataloader(dataloader):

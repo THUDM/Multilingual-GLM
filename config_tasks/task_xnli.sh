@@ -11,14 +11,14 @@ PROMPT_EPOCH=200
 TRAIN_ARGS="--lr-decay-style linear \
             --warmup 0 \
             --weight-decay 1.0e-1 \
-            --pattern-id 1"
+            --pattern-id 4"
 
 COMMON_ARGS="--save-interval 10000 \
              --log-interval 50 \
              --eval-interval 100 \
              --eval-iters 100"
 
-PATTERN_IDS=(0 1 2 3)
+#PATTERN_IDS=4 #(0 1 2 3)
 PROMPT_IDS=(1 2 3)
 
 BATCH_SIZE=64

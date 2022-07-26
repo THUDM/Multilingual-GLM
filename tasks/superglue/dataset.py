@@ -58,8 +58,8 @@ class SuperGlueDataset(Dataset):
     def __init__(self, args, task_name, data_dir, seq_length, split, tokenizer, for_train=False,
                  pattern_ensemble=True, pattern_text=False):
         
-        #if 'xnli' in task_name:
-        #    pattern_ensemble = False
+        if 'xnli' in task_name:
+            pattern_ensemble = False
 
         self.processor = PROCESSORS[task_name](args)
         args.variable_num_choices = self.processor.variable_num_choices
