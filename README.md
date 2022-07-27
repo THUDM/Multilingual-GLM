@@ -118,17 +118,17 @@ The script [scripts/ds_pretrain_nvidia.sh](scripts/ds_pretrain_nvidia.sh) launch
 The file [config/ds_multi_blockta_large.sh](config/ds_multi_blockta_large.sh) defines the hyperparameters for pretraining. Most of the arguments are fairly self-explanatory. Specifically, `--train-data` can be multiple keywords defined in `NAMED_CORPORA` in [data_utils/corpora.py](data_utils/corpora.py). The hyperparameters of the optimizer are defined in the corresponding json file under `config`. The semantics of the json file can be found [here](https://www.deepspeed.ai/docs/config-json).
 
 ## MT5 Reproduction 
-The code for reproducing experiments in MT5 `finetune_mt5.py`. We use a tool called [wandb](https://wandb.ai/site) to track our experiments. After signing up for a new account, use `wandb login --relogin` to login. You can also use `wandb offline` to turn off wandb synchronizing your experiment online.
+The code for reproducing experiments in MT5 is at `mt5/finetune_mt5.py`. We use a tool called [wandb](https://wandb.ai/site) to track our experiments. After signing up for a new account, use `wandb login --relogin` to login. You can also use `wandb offline` to turn off wandb synchronizing your experiment online.
 
 If you only want to use one GPU to train, use
 ```shell
-  python3 finetune_mt5.py scisummnet simple
+  python3 mt5/finetune_mt5.py scisummnet simple
 ``` 
 to train on the [scisummnet dataset](https://cs.stanford.edu/~myasu/projects/scisumm_net/). 
 
 Our distributed training is automated with [Accelerate](https://huggingface.co/docs/accelerate/index). `accelerate config` sets up the configuration. `accelerate test` runs a sanity check.
 ```shell
-  accelerate launch finetune_mt5.py scisummnet simple
+  accelerate launch mt5/finetune_mt5.py scisummnet simple
 ``` 
 runs the training on the scisummnet dataset.
 
