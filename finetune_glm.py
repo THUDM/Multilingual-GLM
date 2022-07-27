@@ -507,7 +507,7 @@ if __name__ == '__main__':
     elif args.task.lower() in ['lambda', 'wikitext', 'language_model']:
         from tasks.language_model.finetune import main
     elif args.task.lower() in ['cnn_dm', 'cnn_dm_original', 'gigaword', 'blank', 'squad_generation', 'squad',
-                               'squad_v1', 'xsum', 'lcsts','extraction', 'cmrc', 'tydiqa', 'xwikis','mlqa', 'xlsum','wikilingua','scitldr','ncls','ncls_multitask', "ensum"]:
+                               'squad_v1', 'xsum', 'lcsts','extraction', 'cmrc', 'tydiqa', 'xwikis','mlqa', 'xlsum','wikilingua','scitldr','ncls','ncls_multitask', "ensum","mtg_crosssum"]:
         from tasks.seq2seq.finetune import main
     else:
         raise NotImplementedError('Task {} is not implemented.'.format(args.task))

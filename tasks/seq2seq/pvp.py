@@ -64,7 +64,7 @@ class SummaryPVP(PVP):
         prompt_summary = self.tokenizer.EncodeAsIds(" tl;dr:").tokenization + [self.mask_id]  
         if 'tgt_lang' in example.meta:
             if example.meta['tgt_lang'] == 'zh':
-                prompt_summary = self.tokenizer.EncodeAsIds(" 中文摘要:").tokenization + [self.mask_id]
+                prompt_summary = self.tokenizer.EncodeAsIds(" 中文摘要：").tokenization + [self.mask_id]
         
         if len(source_tokens) > self.max_src_length - len(prompt)- len(prompt_summary):
             source_tokens = source_tokens[:self.max_src_length - len(prompt) - len(prompt_summary)]
@@ -178,6 +178,7 @@ PVPS = {
     "scitldr": SummaryPVP,
     "ensum": SummaryPVP,
     "ncls": SummaryPVP,
+    "mtg_crosssum": SummaryPVP,
     "ncls_multitask": NCLSPVP,
     "squad_generation": QuesGenPVP,
     "cmrc": ChineseQAPVP,

@@ -147,7 +147,7 @@ def main(args):
     if max_length > args.max_sequence_length:
         args.additional_sequence_length = max_length - args.max_sequence_length
     if args.task.lower() in ['ensum','cnn_dm', 'cnn_dm_original', 'gigaword', 'blank', 'squad_generation', 'xsum',
-                             'squad', 'xwikis', 'lcsts', 'squad_v1', 'extraction', 'cmrc', 'mlqa', 'tydiqa', 'xlsum', 'wikilingua','scitldr','ncls','ncls_multitask']:
+                             'squad', 'xwikis', 'lcsts', 'squad_v1', 'extraction', 'cmrc', 'mlqa', 'tydiqa', 'xlsum', 'wikilingua','scitldr','ncls','ncls_multitask','mtg_crosssum']:
         if args.prefix_prompt > 0:
             model_cls = GLMFPrefixModel
         else:

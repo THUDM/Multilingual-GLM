@@ -22,6 +22,119 @@ from torch import cuda
 # Import distributed training module
 from accelerate import Accelerator
 
+config = None
+
+class TaskDefinition:
+    dataset = {
+            "ncls|multitask": {"train": ["ncls:zh", "ncls:en"], "valid": ["ncls:zh"]},
+            "ncls|sum2zh": {"train": ["ncls:zh"], "valid": ["ncls:zh"]},
+            "ncls|sum2en": {"train": ["ncls:en"], "valid": ["ncls:en"]},
+            "ncls|sci_eval": {"train": ["ncls:zh"], "valid": ["scisummnet:zh"]},
+            "scisummnet|simple": {"train": ["scisummnet:zh:0.8"], "valid": ["scisummnet:zh:-0.2"]},
+            "scisummnet|ncls_mixed": {"train": ["scisummnet:zh:0.8", "ncls:zh:19200"], "valid": ["scisummnet:zh:-0.2"]},
+            "mtgcrosssum|S-en-T-zh-V-all": {"train": ["mtgcrosssum:en2zh"], "valid": ["mtgcrosssum:de2zh", "mtgcrosssum:fr2zh", "mtgcrosssum:es2zh", "mtgcrosssum:zh2zh"]}
+    }
+    def __init__(self, task, subtask):
+        self.task = task + "|" + subtask
+    def get_train_dataset(self):
+        return self.dataset[self.task]["train"]
+    def get_valid_dataset(self):
+        return self.dataset[self.task]["valid"]
+
+def read_MTGCrossSum(lang, split, size):
+    source_lang, target_lang = lang.split("2")
+    if target_lang != 'zh':
+        raise RuntimeError("Summary prompt for target language hasn't been defined. Please define it first.")
+    prompt = " 中文摘要："
+    prefix = "../data/mtg_sum/train" if split == "train" else "../data/mtg_sum/dev.annotation"
+    texts = []
+    f = open(prefix + ".doc." + source_lang)
+    for line in f:
+        text = line.strip()
+        texts.append(text + prompt)
+    f.close()
+    summs = []
+    f = open(prefix + ".sum." + target_lang)
+    for line in f:
+        summ = line.strip()
+        summs.append(summ)
+    f.close()
+    if len(texts) != len(summs):
+        raise RuntimeError("Sizes of source texts and summarys don't match.")
+    df = pd.DataFrame({"text": texts, "zh_sum": summs})
+    print(df.head())
+    return df
+
+def read_NCLS(lang, split, size):
+    prompt = " 中文摘要：" if lang == "zh" else " Please summarize in English:"
+    df = pd.read_csv('../data/ncls/ncls_en2zh_'+split+'.csv',encoding='utf-8')
+    df = df[['text', lang+'_sum']]
+    for index, text in enumerate(df.text):
+        try:
+            text = text.strip()
+            if len(text) > config.MAX_LEN - len(prompt):
+                df.iloc[index].text = text[:config.MAX_LEN - len(prompt)]
+        except TypeError:
+            continue
+        except AttributeError:
+            continue
+    df.text = df.text + prompt
+    if lang == "en":
+        df = df.rename(columns={'en_sum':'zh_sum'})
+    if size != None:
+        size = float(size)
+        size = int(size * df.shape[0]) if abs(size) < 1 else int(size)
+        df = df.head(size) if size > 0 else df.tail(-size)
+    print(df.head())
+    return df
+
+def read_Scisummnet(lang, split, size):
+    if lang != "zh":
+        raise RuntimeError("Scisummnet Summary-to-English Dataset Is Not Included.")
+    prompt = " 中文摘要："
+    df = pd.read_csv('../data/scisummnet/scisummnet.csv',encoding='utf-8')
+    df = df[['text', 'zh_sum']]
+    for index, text in enumerate(df.text):
+        try:
+            text = text.strip()
+            if len(text) > config.MAX_LEN - len(prompt):
+                df.iloc[index].text = text[:config.MAX_LEN - len(prompt)]
+        except TypeError:
+            continue
+        except AttributeError:
+            continue
+    df.text = df.text + prompt
+    if size != None:
+        size = float(size)
+        size = int(size * df.shape[0]) if abs(size) < 1 else int(size)
+        df = df.head(size) if size > 0 else df.tail(-size)
+    print(df.head())
+    return df
+
+def init_data(task):
+    reader = {"ncls": read_NCLS, "scisummnet": read_Scisummnet, "mtgcrosssum": read_MTGCrossSum}
+    train_dfs = []
+    for trainset in task.get_train_dataset():
+        train_args = trainset.split(":") + [None]
+        dset, lang, size = train_args[0], train_args[1], train_args[2]
+        df = reader[dset](lang, "train", size)
+        train_dfs.append(df)
+    valid_dfs = []
+    for validset in task.get_valid_dataset():
+        valid_args = validset.split(":") + [None]
+        dset, lang, size = valid_args[0], valid_args[1], valid_args[2]
+        df = reader[dset](lang, "val", size)
+        valid_dfs.append(df)
+    train_df = pd.concat(train_dfs,ignore_index=True)
+    valid_df = pd.concat(valid_dfs,ignore_index=True)
+    train_df = train_df.sample(frac=1).reset_index(drop=True)
+    valid_df = valid_df.sample(frac=1).reset_index(drop=True)
+    print("========== train ==========")
+    print(train_df.head())
+    print("========== valid ==========")
+    print(valid_df.head())
+    return train_df, valid_df
+
 class CustomDataset(Dataset):
 
     def __init__(self, dataframe, tokenizer, source_len, summ_len):
@@ -57,7 +170,7 @@ class CustomDataset(Dataset):
             'target_ids_y': target_ids.to(dtype=torch.long)
         }
 
-
+'''
 def init_data(task, config, multitask=False):
     
     if task == 'ncls':
@@ -125,6 +238,7 @@ def init_data(task, config, multitask=False):
         train_dataset = train_dataset.reset_index(drop=True)
         
         return train_dataset, val_dataset 
+'''
 
 def train(epoch, tokenizer, model, device, loader, optimizer, accelerator):
     model.train()
@@ -143,7 +257,7 @@ def train(epoch, tokenizer, model, device, loader, optimizer, accelerator):
         if iteration%10 == 0:
             wandb.log({"Training Loss": loss.item()})
 
-        if iteration%500==0:
+        if iteration%50 == 0:
             print(f'Epoch: {epoch}, Iteration: {iteration}, Loss:  {loss.item()}')
         
         optimizer.zero_grad()
@@ -189,7 +303,9 @@ def validate(epoch, tokenizer, model, device, loader):
     return predictions, actuals
 
 def main(args):
-    
+   
+    global config
+
     #Initialize distributed training 
     accelerator = Accelerator()
     device = accelerator.device
@@ -205,10 +321,10 @@ def main(args):
     config.VALID_BATCH_SIZE = 8   # input batch size for testing (default: 1000)
     config.TRAIN_EPOCHS = 40        # number of epochs to train (default: 10)
     config.VAL_EPOCHS = 1
-    config.LEARNING_RATE = 1e-3   # learning rate (default: 0.01)
+    config.LEARNING_RATE = 5e-4   # learning rate (default: 0.01)
     config.SEED = 42               # random seed (default: 42)
     config.MAX_LEN = 768
-    config.SUMMARY_LEN = 100
+    config.SUMMARY_LEN = 160
 
     #Setting finetuned model path
     
@@ -229,31 +345,31 @@ def main(args):
     #df = pd.read_csv('./news_summary.csv', encoding='latin-1')
     #df = df[['text', 'ctext']]
     #df.ctext = 'summarize: ' + df.ctext
+    
     task = args[1]
     subtask = args[2]
+    
+    '''
     print(f"now training on {task}")
     multitask = False
-    
     if args[2] == 'multitask':
         multitask = True
-    
     train_dataset, val_dataset = init_data(task, config, multitask)
-    
     if args[2] == 'sci_eval':
         _, val_dataset = init_data('scisummnet', config, multitask)
-
     #ncls 
     if args[2] == 'ncls_mixed':
         ncls_train, _ = init_data('ncls', config)
         ncls_train = ncls_train.head(19200)
         train_dataset = pd.concat([train_dataset, ncls_train],ignore_index=True)
         train_dataset = train_dataset.sample(frac=1).reset_index(drop=True)
-
     #print("FULL Dataset: {}".format(df.shape))
+    '''
     
+    task_def = TaskDefinition(task, subtask)
+    train_dataset, val_dataset = init_data(task_def)
     print("TRAIN Dataset: {}".format(train_dataset.shape))
     print("TEST Dataset: {}".format(val_dataset.shape))
-
 
     # Creating the Training and Validation dataset for further creation of Dataloader
     training_set = CustomDataset(train_dataset, tokenizer, config.MAX_LEN, config.SUMMARY_LEN)
@@ -353,5 +469,5 @@ def main(args):
         print('Output Files generated for review')
 
 if __name__ == '__main__':
-    os.environ["CUDA_VISIBLE_DEVICES"] = '4,5,6,7'
+    os.environ["CUDA_VISIBLE_DEVICES"] = '0,1,2,3,4,5,6,7'
     main(sys.argv)

@@ -821,6 +821,82 @@ class CNNDMProcessor(SummaryProcessor):
         string = string.replace(" 'll", "'ll")
         return string
 
+class MTGCrossSummaryProcessor(SummaryProcessor):
+    def detokenize(self, string, is_target=False):
+        _tok_dict = {"(": "-LRB-", ")": "-RRB-",
+                     "[": "-LSB-", "]": "-RSB-",
+                     "{": "-LCB-", "}": "-RCB-"}
+        if not is_target:
+            string = string.replace("<S_SEP>", "")
+        else:
+            string = string.replace("<S_SEP>", "[SEP]")
+        for key, value in _tok_dict.items():
+            string = string.replace(value, key)
+        string = string.replace("''", "\"")
+        string = string.replace("``", "\"")
+        string = string.replace("`", "'")
+        string = string.replace(" n't", "n't")
+        string = string.replace(" 's", "'s")
+        string = string.replace(" 'd", "'d")
+        string = string.replace(" 'll", "'ll")
+        return string
+    def _yield_examples(self, split):
+        tgt_lang = "zh"
+        train_lang = "en"
+        if split == "train":
+            source_texts, target_texts = [], []
+            with open(os.path.join(self.data_dir, f"train.doc."+train_lang)) as file:
+                for line in file:
+                    text = self.detokenize(punctuation_standardization(line.strip()))
+                    source_texts.append(text)
+            with open(os.path.join(self.data_dir, f"train.sum."+tgt_lang)) as file:
+                for line in file:
+                    text = self.detokenize(punctuation_standardization(line.strip()))
+                    target_texts.append(text)
+            assert len(source_texts) == len(target_texts)
+        elif split == "dev":
+            source_texts, target_texts = [], []
+            for lang in ['en','de','es','fr','zh']:
+                if lang == train_lang:
+                    continue
+                with open(os.path.join(self.data_dir, "dev.annotation.doc."+lang)) as file:
+                    for line in file:
+                        text = self.detokenize(punctuation_standardization(line.strip()))
+                        source_texts.append(text)
+                with open(os.path.join(self.data_dir, "dev.annotation.sum."+tgt_lang)) as file:
+                    for line in file:
+                        text = self.detokenize(punctuation_standardization(line.strip()))
+                        target_texts.append(text)
+            assert len(source_texts) == len(target_texts)
+        elif split == "test":
+            source_texts, target_texts = [], []
+            for lang in ['en','de','es','fr','zh']:
+                if lang == train_lang:
+                    continue
+                with open(os.path.join(self.data_dir, "test.annotation.doc."+lang)) as file:
+                    for line in file:
+                        text = self.detokenize(punctuation_standardization(line.strip()))
+                        source_texts.append(text)
+                with open(os.path.join(self.data_dir, "test.annotation.sum."+tgt_lang)) as file:
+                    for line in file:
+                        text = self.detokenize(punctuation_standardization(line.strip()))
+                        target_texts.append(text)
+            assert len(source_texts) == len(target_texts)
+        else:
+            raise NotImplementedError(split)
+        idxs = [i for i in range(len(source_texts))]
+        random.shuffle(idxs)
+        random.shuffle(idxs)
+        source_texts = [source_texts[i] for i in idxs]
+        target_texts = [target_texts[i] for i in idxs]
+        for idx, (source_text, target_text) in enumerate(zip(source_texts, target_texts)):
+            guid = "%s-%s" % (split, idx)
+            meta = {"tgt_lang": tgt_lang, "ref": self.tokenizer.DecodeIds(self.tokenizer.EncodeAsIds(target_text).tokenization)}
+            example = InputExample(guid=guid, text_a=source_text, text_b=target_text, meta=meta)
+            if idx < 3:
+                print_rank_0((source_text, target_text, meta["ref"]))
+            yield example
+
 
 class GGWProcessor(SummaryProcessor):
     def detokenize(self, string, is_target=False):
@@ -1245,7 +1321,8 @@ PROCESSORS = {
     "xsum": XSumProcessor,
     "squad_generation": SQuADQGProcessor,
     "cmrc": CMRCProcessor,
-    "xlsum": XLSumProcessor
+    "xlsum": XLSumProcessor,
+    "mtg_crosssum": MTGCrossSummaryProcessor
 }
 
 
@@ -1273,7 +1350,8 @@ class Seq2SeqDataset(torch.utils.data.Dataset):
             self.processor = LCSTSProcessor(self.data_dir, tokenizer, self.max_src_length, args)
         elif self.task == 'ensum':
             self.processor = AlltoEnMultitaskProcessor(self.data_dir, tokenizer, self.max_src_length, args)
-
+        #elif self.task == 'mtg_crosssum':
+        #    self.processor = MTGCrossSummaryProcessor(self.data_dir, tokenizer, self.max_src_length, args)
         elif self.task in ['ncls', 'ncls_multitask']:
             if self.task == 'ncls':
                 multitask = False
