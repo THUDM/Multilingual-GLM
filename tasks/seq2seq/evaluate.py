@@ -179,8 +179,8 @@ def rouge_metric(predictions, labels, examples, metric="rouge-1", duplicate_rate
             if any(get_f1(sentence, s) > 1.0 for s in buf):
                 continue
             s_len = len(sentence.split())
-            if s_len <= 4:
-               continue
+            #if s_len <= 4:
+            #   continue
             buf.append(sentence)
         if duplicate_rate and duplicate_rate < 1:
             buf = remove_duplicate(buf, duplicate_rate)
