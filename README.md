@@ -122,13 +122,15 @@ The code for reproducing experiments in MT5 is at `mt5/finetune_mt5.py`. We use 
 
 If you only want to use one GPU to train, use
 ```shell
-  python3 mt5/finetune_mt5.py scisummnet simple
+  cd mt5
+  python3 finetune_mt5.py scisummnet simple
 ``` 
 to train on the [scisummnet dataset](https://cs.stanford.edu/~myasu/projects/scisumm_net/). 
 
 Our distributed training is automated with [Accelerate](https://huggingface.co/docs/accelerate/index). `accelerate config` sets up the configuration. `accelerate test` runs a sanity check.
 ```shell
-  accelerate launch mt5/finetune_mt5.py scisummnet simple
+  cd mt5
+  accelerate launch finetune_mt5.py scisummnet simple
 ``` 
 runs the training on the scisummnet dataset.
 
