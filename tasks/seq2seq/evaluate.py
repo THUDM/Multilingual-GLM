@@ -191,6 +191,9 @@ def rouge_metric(predictions, labels, examples, metric="rouge-1", duplicate_rate
             for ref, pred in zip(ref_list, pred_list):
                 output.write(json.dumps({"ref": ref, "pred": pred}) + "\n")
     
+    my_tokenizer = spm.SentencePieceProcessor(model_file='tokenizer/mglm250k/mglm250k-uni.model')
+    pred_list = [' '.join(str(encoding) for encoding in my_tokenizer.encode(pred)) for pred in pred_list]
+    ref_list = [' '.join(str(encoding) for encoding in my_tokenizer.encode(act)) for act in ref_list]
     scorer = rouge_scorer.RougeScorer([metric_dict[metric]], use_stemmer=True)
     scores = [scorer.score(pred, ref) for pred, ref in zip(pred_list, ref_list)]
     scores = [score[metric_dict[metric]].fmeasure for score in scores]
