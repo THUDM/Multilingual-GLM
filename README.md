@@ -8,7 +8,7 @@ The backbone structure of this model is based on [GLM: General Language Model Pr
 Code is mainly based on [THUDM/GLM](https://github.com/THUDM/GLM). Part of the code is also based on [Megatron-LM](https://github.com/NVIDIA/Megatron-LM) and [PET](https://github.com/timoschick/pet).
 
 ## Pretrained Models
-
+<!--
 Here are the download links to our
 
 [Pretrained Checkpoint](https://static.aminer.cn/misc/MultiGLM/1B/pretrained.pt) (13.9 GB)
@@ -18,6 +18,8 @@ Here are the download links to our
 [Model Configuration File](https://static.aminer.cn/misc/MultiGLM/1B/model_blocklm_multilingual_large.sh)
 
 [Multilingual Tokenizer](https://static.aminer.cn/misc/MultiGLM/1B/mglm250k/mglm250k-uni.model) 
+-->
+The use of pretrained checkpoints of Multilingual GLM follows another license, and will be released soon after we get everything ready. 
 
 ## Test Results
 
