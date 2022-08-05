@@ -1,11 +1,20 @@
 # Multilingual-GLM
-This repository contains the code of MGLM, the multilingual variant of GLM, a general language model trained with an autoregressive blank infilling objective. 
+This repository contains the code of MGLM: a multilingual variant of GLM, a general language model trained with an autoregressive blank infilling objective. 
 
-You may refer to our [slides](https://github.com/truthbutcher/studymaterials/blob/main/MultiGLM.pdf) on MGLM. You may also want to check out our [interactive demo](https://www.sci-brain.cn/innovations/multilingual_big_model) based on MGLM that generates a brief Chinese/English summary for your article.
+You may refer to our [slides](https://github.com/truthbutcher/studymaterials/blob/main/MultiGLM.pdf) on MGLM. You may also want to check out our [interactive demo](https://www.sci-brain.cn/innovations/multilingual_big_model) based on MGLM that generates a brief Chinese/English summary for your article in any commonly used language.
 
 The backbone structure of this model is based on [GLM: General Language Model Pretraining with Autoregressive Blank Infilling](https://aclanthology.org/2022.acl-long.26/) (Du et al., ACL 2022) 
 
 Code is mainly based on [THUDM/GLM](https://github.com/THUDM/GLM). Part of the code is also based on [Megatron-LM](https://github.com/NVIDIA/Megatron-LM) and [PET](https://github.com/timoschick/pet).
+
+### Parameters
+Here we provide a comparison between the sizes of different multilingual language models. 
+| Model     | Parameters |
+|  ----  | ---- | 
+| [mBERT](https://github.com/google-research/bert/blob/master/multilingual.md) | 180M | 
+| [XLM-R](https://arxiv.org/abs/1911.02116) | 550M |
+| [MT5-Large](https://arxiv.org/abs/2010.11934) | 1.2B                   |
+| GLM-Large | 1B                 |
 
 ## Pretrained Models
 <!--
@@ -23,27 +32,19 @@ The use of pretrained checkpoints of Multilingual GLM follows another license, a
 
 
 ## Test Results
-### Parameters
-Here we provide a comparision between the sizes of different multilingual language models. 
-| Model     | Number of Parameters |
-|  ----  | ---- | 
-| [mBERT](https://github.com/google-research/bert/blob/master/multilingual.md) | 180M | 
-| [XLM-R](https://arxiv.org/abs/1911.02116) | 550M |
-| [MT5-Large](https://arxiv.org/abs/2010.11934) | 1.2B                   |
-| GLM-Large | 1B                 |
 
 ### Tasks in XTREME Benchmark
 |  Model | XNLI | PAWS-X | XQuAD | MLQA | TyDiQA |
 |  ----  | ---- | ---- | ---- | ---- | ---- |
-| GLM-Large (1B parameters)  | 75.6 | 85.2 | 83.6/71.9 | 67.52/54.34 |69.6/55.6 |
-| [MT5-Large](https://github.com/google-research/multilingual-t5) (1.2B parameters) | 81.1 | 88.9 | 77.8/61.5 | 71.2/51.7 | 69.9/52.2 |
+| GLM-Large | 75.6 | 85.2 | 83.6/71.9 | 67.52/54.34 |69.6/55.6 |
+| [MT5-Large](https://github.com/google-research/multilingual-t5) | 81.1 | 88.9 | 77.8/61.5 | 71.2/51.7 | 69.9/52.2 |
 
 
 ### Neural Cross Lingual Summarization
 
-#### [NCLS](https://aclanthology.org/D19-1302/)
+The following table contains our test results for the [NCLS](https://aclanthology.org/D19-1302/) English to Chinese(EN2ZHSUM) dataset
 
-Metric is Rouge-1/Rouge-2/Rouge-Lsum
+Metric is Rouge-1/Rouge-2/Rouge-L
 
 |  Model | NCLS English to Chinese|
 |  ----  | ---- | 
@@ -138,7 +139,7 @@ If you only want to use one GPU to train, use
 ``` 
 to train on the [scisummnet dataset](https://cs.stanford.edu/~myasu/projects/scisumm_net/). 
 
-Our distributed training is automated with [Accelerate](https://huggingface.co/docs/accelerate/index). `accelerate config` sets up the configuration. `accelerate test` runs a sanity check.
+Our distributed training is automated with [Accelerate](https://huggingface.co/docs/accelerate/index). `accelerate config` sets up the configuration for distributed training. `accelerate test` runs a sanity check.
 ```shell
   cd mt5
   accelerate launch finetune_mt5.py scisummnet simple
