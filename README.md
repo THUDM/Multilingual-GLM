@@ -21,13 +21,22 @@ Here are the download links to our
 -->
 The use of pretrained checkpoints of Multilingual GLM follows another license, and will be released soon after we get everything ready. 
 
+
 ## Test Results
+### Parameters
+Here we provide a comparision between the sizes of different multilingual language models. 
+| Model     | Number of Parameters |
+|  ----  | ---- | 
+| [mBERT](https://github.com/google-research/bert/blob/master/multilingual.md) | 180M | 
+| [XLM-R](https://arxiv.org/abs/1911.02116) | 550M |
+| [MT5-Large](https://arxiv.org/abs/2010.11934) | 1.2B                   |
+| GLM-Large | 1B                 |
 
 ### Tasks in XTREME Benchmark
 |  Model | XNLI | PAWS-X | XQuAD | MLQA | TyDiQA |
 |  ----  | ---- | ---- | ---- | ---- | ---- |
-| GLM-Large  | 75.6 | 85.2 | 83.6/71.9 | 67.52/54.34 |69.6/55.6 |
-| [MT5-Large](https://github.com/google-research/multilingual-t5) | 81.1 | 88.9 | 77.8/61.5 | 71.2/51.7 | 69.9/52.2 |
+| GLM-Large (1B parameters)  | 75.6 | 85.2 | 83.6/71.9 | 67.52/54.34 |69.6/55.6 |
+| [MT5-Large](https://github.com/google-research/multilingual-t5) (1.2B parameters) | 81.1 | 88.9 | 77.8/61.5 | 71.2/51.7 | 69.9/52.2 |
 
 
 ### Neural Cross Lingual Summarization
@@ -38,7 +47,7 @@ Metric is Rouge-1/Rouge-2/Rouge-Lsum
 
 |  Model | NCLS English to Chinese|
 |  ----  | ---- | 
-| GLM-Large  | 50.27/30.94/38.44 | 
+| GLM-Large | 50.27/30.94/38.44 | 
 | MT5-Large(Reproduced) | 42.31/22.40/31.33 |
 
 ## Get Started
