@@ -461,11 +461,6 @@ class NCLSProcessor(DataProcessor):
         #if split == 'train' and len(filenames) == 2: 
         #    example_list = example_list[:len(example_list)//2]
         
-        #small sample for debugging
-        if split == 'train':
-            return example_list[:40000]
-        else:
-            return example_list[:200]
           
         return example_list
 
