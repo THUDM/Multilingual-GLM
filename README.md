@@ -1,7 +1,7 @@
 # Multilingual-GLM
 This repository contains the code of MGLM: a multilingual variant of GLM, a general language model trained with an autoregressive blank infilling objective. 
 
-You may refer to our [slides](https://github.com/truthbutcher/studymaterials/blob/main/MultiGLM.pdf) on MGLM. You may also want to check out our [interactive demo](https://www.sci-brain.cn/innovations/multilingual_big_model) based on MGLM that generates a brief Chinese/English summary for your article in any commonly used language.
+You may want to check out our [interactive demo](https://models.aminer.cn/mglm-1b/demo/) based on MGLM that generates a brief Chinese/English summary for your article in any commonly used language.
 
 The backbone structure of this model is based on [GLM: General Language Model Pretraining with Autoregressive Blank Infilling](https://aclanthology.org/2022.acl-long.26/) (Du et al., ACL 2022) 
 
@@ -25,6 +25,10 @@ Here are the download links to
 [Model Configuration File](https://static.aminer.cn/misc/MultiGLM/1B/model_blocklm_multilingual_large.sh)
 
 [Multilingual Tokenizer](https://static.aminer.cn/misc/MultiGLM/1B/mglm250k/mglm250k-uni.model) 
+
+which can be used directly by the original GLM code. 
+
+Here in this repo, the mGLM configuration file and multilingual tokenizer are already included.
 
 
 ## Test Results
