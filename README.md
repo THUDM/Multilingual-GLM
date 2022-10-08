@@ -1,7 +1,7 @@
 # Multilingual-GLM
-This repository contains the code of MGLM: a multilingual variant of GLM, a general language model trained with an autoregressive blank infilling objective. 
+This repository contains the code of mGLM: a multilingual variant of GLM, a general language model trained with an autoregressive blank infilling objective. 
 
-You may want to check out our [interactive demo](https://models.aminer.cn/mglm-1b/demo/) based on MGLM that generates a brief Chinese/English summary for your article in any commonly used language.
+You may want to check out our [interactive demo](https://models.aminer.cn/mglm-1b/demo/) based on mGLM that generates a brief Chinese/English summary for your article in any commonly used language.
 
 The backbone structure of this model is based on [GLM: General Language Model Pretraining with Autoregressive Blank Infilling](https://aclanthology.org/2022.acl-long.26/) (Du et al., ACL 2022) 
 
@@ -18,17 +18,9 @@ Here we provide a comparison between the sizes of different multilingual languag
 
 ## Pretrained Models
 
-Here are the download links to
+You can download [Our Pretrained Checkpoint](https://static.aminer.cn/misc/MultiGLM/1B/pretrained.pt), [Model Configuration File](https://static.aminer.cn/misc/MultiGLM/1B/model_blocklm_multilingual_large.sh) and [Multilingual Tokenizer](https://static.aminer.cn/misc/MultiGLM/1B/mglm250k/mglm250k-uni.model) which can be used directly by the original [GLM](https://github.com/THUDM/glm) code. 
 
-[Our Pretrained Checkpoint](https://static.aminer.cn/misc/MultiGLM/1B/pretrained.pt)
-
-[Model Configuration File](https://static.aminer.cn/misc/MultiGLM/1B/model_blocklm_multilingual_large.sh)
-
-[Multilingual Tokenizer](https://static.aminer.cn/misc/MultiGLM/1B/mglm250k/mglm250k-uni.model) 
-
-which can be used directly by the original GLM code. 
-
-Here in this repo, the mGLM configuration file and multilingual tokenizer are already included.
+Here in this repo, the configuration file and multilingual tokenizer are already included.
 
 
 ## Test Results
@@ -120,7 +112,7 @@ If your encounter the `CUDA out of memory` error, which means you GPU memory is 
 Then update the checkpoint path in the model config file (such as [config_tasks/model_blocklm_multilingual_large.sh](config_tasks/model_blocklm_multilingual_large.sh)) and change `MP_SIZE` in the script (such as [scripts/ds_finetune_superglue.sh](scripts/ds_finetune_superglue.sh)) to `2`.
 
 ## Pretrain
-Run the following script to pre-train the MGLM-Large model
+Run the following script to pre-train the mGLM-Large model
 ```shell
   bash scripts/ds_pretrain_nvidia.sh config/ds_multi_blockta_large.sh
 ```
