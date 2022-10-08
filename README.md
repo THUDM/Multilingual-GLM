@@ -17,18 +17,14 @@ Here we provide a comparison between the sizes of different multilingual languag
 | GLM-Large | 1B                 |
 
 ## Pretrained Models
-<!--
-Here are the download links to our
 
-[Pretrained Checkpoint](https://static.aminer.cn/misc/MultiGLM/1B/pretrained.pt) (13.9 GB)
+Here are the download links to
 
-[Finetuned All-to-Chinese Summarizer Checkpoint](https://static.aminer.cn/misc/MultiGLM/1B/summarizer_zh.pt) (2.0 GB)
+[Our Pretrained Checkpoint](https://static.aminer.cn/misc/MultiGLM/1B/pretrained.pt)
 
 [Model Configuration File](https://static.aminer.cn/misc/MultiGLM/1B/model_blocklm_multilingual_large.sh)
 
 [Multilingual Tokenizer](https://static.aminer.cn/misc/MultiGLM/1B/mglm250k/mglm250k-uni.model) 
--->
-The use of pretrained checkpoints of Multilingual GLM follows another license, and will be released soon after we get everything ready. 
 
 
 ## Test Results
