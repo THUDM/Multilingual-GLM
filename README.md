@@ -18,7 +18,7 @@ Here we provide a comparison between the sizes of different multilingual languag
 
 ## Pretrained Models
 
-You can download [Our Pretrained Checkpoint](https://static.aminer.cn/misc/MultiGLM/1B/pretrained.pt) and save it to a specific path. The multilingual tokenizer and configuration file of our model are already included in this repo. 
+You can download [Our Pretrained Checkpoint](https://lfs.aminer.cn/misc/sunmengyang/mglm1b/new_pretrained.pt) and specify the checkpoint path in a script. The multilingual tokenizer and configuration file of our model are already included in this repo. 
 
 
 ## Test Results
