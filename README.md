@@ -18,9 +18,7 @@ Here we provide a comparison between the sizes of different multilingual languag
 
 ## Pretrained Models
 
-You can download [Our Pretrained Checkpoint](https://static.aminer.cn/misc/MultiGLM/1B/pretrained.pt), [Model Configuration File](https://static.aminer.cn/misc/MultiGLM/1B/model_blocklm_multilingual_large.sh) and [Multilingual Tokenizer](https://static.aminer.cn/misc/MultiGLM/1B/mglm250k/mglm250k-uni.model) which can be used directly by the original [GLM](https://github.com/THUDM/glm) code. 
-
-Here in this repo, the configuration file and multilingual tokenizer are already included.
+You can download [Our Pretrained Checkpoint](https://static.aminer.cn/misc/MultiGLM/1B/pretrained.pt) and save it to a specific path. The multilingual tokenizer and configuration file of our model are already included in this repo. 
 
 
 ## Test Results
